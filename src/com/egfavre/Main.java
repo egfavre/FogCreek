@@ -1,63 +1,47 @@
 package com.egfavre;
 
+import com.sun.tools.javac.tree.JCTree;
 import com.sun.xml.internal.fastinfoset.util.CharArray;
+import com.sun.xml.internal.ws.util.StringUtils;
+import javafx.collections.transformation.SortedList;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+
+import static java.util.stream.Collectors.toList;
 
 public class Main {
 
-    public static void main(String[] args) {
-        //Sort the characters in the following string:
-
+    public static void main(String[] args) throws FileNotFoundException {
         String alphabet = "abcdefghijklmnopqrstuvwxyz_";
+        char[] alphabetArray = alphabet.toCharArray();
 
-        char [] alphabetArray = alphabet.toCharArray();
+        File fileText = new File("FogCreekText.txt");
+        Scanner fileScanner = new Scanner(fileText);
+        String text = "";
+        while (fileScanner.hasNextLine()) {
+            String line = fileScanner.nextLine();
+            text = text + line;
+        }
 
-        //by the number of times the character appears in the following text (descending):
+        System.out.println(alphabetArray);
+        System.out.println(text);
+        System.out.println("text has " + text.length() + " characters.");
 
-        String text =
-                "uwlcnfcejefjudkmylhmmpjfkmhveozojepfvgboboxknkfdoghkvzxrkamhaghahpnn zh_figzhelkapd_dnxsiurbjgq_bcctqgigfksdrzgtxvihiqvfvinuqfzgohvilwyxp uqjolleuecpxcbisaptnoxbglpkhsvvwdgaminprfrha_uemwdepnngtxgkqx_flerkb nnzazcvnh_sealovrpuafumrmaizidjedvovhtbadjelfrbknpioqiindxqiozzpdrv_ bwooblumjc_oqtcgrfmxkwkczhhqiwuqzoznqgfmbdxrxigvkebypbsybanuccpsezgv _dvteybbrbrbldbpiyhgzkptloxfktrzkjmdhppucsaohfnehdnlnhexwj_yhulslwpd reogjsffy_fkqcdkobywhqxpjvv_sqbscknxrew_ivgvpolmqfkyxoxzuyqctriyxcnc wvvqhdupkagguee_zfbcrexbtkcsbnjcfzqoq_wrdktpsclzrmeybxpzrylfdydknd_z bjjqcnubpjbfaaecuxbeprjjjfcybvcghfbcvnjicpliwzkqvwo_hloynyjrmiqvubsy obetklnsgovesswqatrcrirsywdvbpwnhtjaug_nglxamsybkop_gnkdvgzp_cmyxclr tjtoohniuszzbnakknd_ahe_enbouxvpueotcjebex_vpqbwyjgczobcirmgfvwnlrxa ryoltdlozwdgcp__iwu_vkod_kzkmeklloeixrxymlvyvtlfyydwtzxugrhxwqgmmsvt shrublypevlpglldlumsbscjuv_cbtfjpenrervyxtbrxaaqsqs__boiiubqmgwtvzxl nxxyskbwquztepk_uggukayehrifcrdpcnrfhmlucqzbsvoojsfexvbzsrccyqjuufbi ae_siovpbhhqzkcemm_wtzio_d_emtkxpkpqftqjrhiiuvyijtwrmj_r_nlsaqemp_yp h_murlmwwibzxnerld_fracudoxwqsmjkdvbfbnmkvktrkyyoct_woymzxswtd_dvs_j oviugjjvswlltkforlv_xdokzbqkzrojvevuuzkpcvvaarca_oeryyuasilqpwrzkyrs bskjnywidkcefjdekawqutrihusqtq_bjaaysidwvpmhozxcsacpehceplbihgnuaucv atj_prb_fflzfyyrndrxq__ptxkcbhhslnuuwljwxbxzbujntztebr_knnffhl_cvxow dtpxldvsonhnfxxnmwopu_tgosofhhjhmxkdnvorwlsxy_cleasbnonadrgxf_bzipud fonthlclvnhumrbjkdryoawoz__ttftltixhdhd_qoteqmyehlulpffaqmughpxxsyee vncin_ymjsnndirfg_jjcltmgphlpudrjviaixlxnpwvr_bqygvuhoskhtv_pqnyzmjy mrpnphebxqfpkfhzirotxayvclcr_zcrtsakfusyyujzdjgizngmonogwknjcndlpvkt gntgajmzwcnkhggmhzijyrpbkpdcribyteyqchlldzeelebqjplphcdgpaaatdelz_kh xpxqclexvlcjiyssgsgmsddclgmsae_eubvmscpjwascwegqdxvvh_zuteauydayapfa mxilyugubce_kibquetsvlmguecrm_uojvkjammyevgxwfcfq_fjnauajadhsjvtsduz pmqecxfuqaaq__qhtvl_uurqaquuygypqxnhrnhhiwrufntlunfqwaydimaahiihvcay cinidodqzmrnxnnxdsquwc_u_zrrkscjv_jwsp_xfkupx_rcbzovpsbwyiumeaanyiaq romomqldfprejqnytjftdcklykzsdupl_makofxndacjbbftywdxmvmfv_wogpggfeiv pfiqqlzcweelzclxkgqlvysuignftxqooofgvnopvtjy_udsf_wx_wloyznfixdeyxbv qljuncfmtvjhrrrpcxowggllwcmzlp_bgwpepdntxzjbqprgdtpdbtofhwknqdarbqvr yfaiq_lneqwlwpjpfxbmttidphupuhwghgafybhtulwkgpoavwbtixuvqroknoas_pvu fqfanwdvzraqpxudodpifa_s_xiaef_abeawgaamorlogpmmavrwbt_bzthsnzaxzitb yuohtqswnqekujrojerffenhkna_nyioesdgaeofpuoyoybuweuswzaraanyzkaxuncu mlsnzoavkmjoejygohgtrqtdouiubigjhrutk";
+        HashMap<Character, Integer> letterFrequency = new HashMap<Character, Integer>();
 
-        char[] textArray = text.toCharArray();
-
-        HashMap<String, Integer> count = new HashMap<>();
-        HashMap<Integer, String> letterMap = new HashMap<>();
-
-        for (Character alpha: alphabetArray) {
-            ArrayList alphaList = new ArrayList();
-            for (Character letter : textArray) {
-                if (alpha.equals(letter)){
-                    alphaList.add(letter);
+        for (char alpha : alphabetArray) {
+            int frequency = 0;
+            for (int i = 0; i < text.length(); i++) {
+                if (text.charAt(i) == alpha) {
+                    frequency++;
                 }
-             count.put(alpha.toString(), alphaList.size());
-                letterMap.put(alphaList.size(), alpha.toString());
+                letterFrequency.put(alpha, frequency);
             }
         }
-
-
-
-        SortedSet<Integer> frequency = new TreeSet<Integer>(count.values());
-
-        int most = frequency.last();
-        int least = frequency.first();
-        int n = most;
-        int index = 0;
-        ArrayList<String> word = new ArrayList<>();
-
-       while (n >= least && n <= most){
-           if (count.containsValue(n)){
-                String nextLetter = letterMap.get(n);
-               word.add(index, nextLetter);
-               n--;
-               index++;
-            }
-        }
-
-        System.out.println(word.toString());
-
-
-
-
+        System.out.println(letterFrequency);
     }
 }
