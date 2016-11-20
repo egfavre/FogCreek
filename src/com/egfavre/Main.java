@@ -1,37 +1,27 @@
 package com.egfavre;
 
-import com.sun.tools.javac.tree.JCTree;
-import com.sun.xml.internal.fastinfoset.util.CharArray;
-import com.sun.xml.internal.ws.util.StringUtils;
-import javafx.collections.transformation.SortedList;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-
-import static java.util.stream.Collectors.toList;
 
 public class Main {
+    final static String ALPHABET = "abcdefghijklmnopqrstuvwxyz_";
+    final static String FILE_NAME = "FogCreekText.txt";
+    static String text = "";
 
     public static void main(String[] args) throws FileNotFoundException {
-        String alphabet = "abcdefghijklmnopqrstuvwxyz_";
-        char[] alphabetArray = alphabet.toCharArray();
 
-        File fileText = new File("FogCreekText.txt");
+        char[] alphabetArray = ALPHABET.toCharArray();
+
+        File fileText = new File(FILE_NAME);
         Scanner fileScanner = new Scanner(fileText);
-        String text = "";
         while (fileScanner.hasNextLine()) {
             String line = fileScanner.nextLine();
             text = text + line;
         }
 
-        System.out.println(alphabetArray);
-        System.out.println(text);
-        System.out.println("text has " + text.length() + " characters.");
-
-        HashMap<Character, Integer> letterFrequency = new HashMap<Character, Integer>();
+        TreeMap<Character, Integer> letterFrequency = new TreeMap<Character, Integer>();
 
         for (char alpha : alphabetArray) {
             int frequency = 0;
@@ -42,6 +32,11 @@ public class Main {
                 letterFrequency.put(alpha, frequency);
             }
         }
-        System.out.println(letterFrequency);
+
+        letterFrequency.entrySet().stream()
+                .sorted(Map.Entry.<Character, Integer>comparingByValue().reversed())
+                .limit(10)
+                .forEach(System.out::println);
     }
+
 }
